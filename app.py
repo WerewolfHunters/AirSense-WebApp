@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, flash, session
-
-
+from database.mongodb.user_db import *
+import os
 
 app = Flask(__name__)
 app.secret_key = "myKey"  # Needed for session & flash
@@ -8,42 +8,43 @@ app.secret_key = "myKey"  # Needed for session & flash
 
 
 # Home page
-@app.route('/', methods=['GET'])
+@app.route('/')
 def home():
     return render_template('home.html')
 
-
 # Dashboard
-@app.route('/dashboard', methods=['GET', 'POST'])
+@app.route('/dashboard')
 def dashboard():
     if 'user' in session:
         return f"<h1>Welcome {session['user']['first_name']}!</h1>"
-    else:
-        flash("Please log in first!", "warning")
-        return redirect(url_for('login'))
+    flash("Please log in first!", "warning")
+    return redirect(url_for('login'))
 
-
-# Login page
-@app.route('/login', methods=['POST', 'GET'])
+# Login
+@app.route('/login', methods=['GET', 'POST'])
 def login():
     if request.method == 'POST':
         email = request.form.get('email')
         password = request.form.get('password')
 
-        users = session.get('users', {})  # Retrieve stored users
+        user = get_user_by_email(email)
 
-        if email in users and users[email]['password'] == password:
-            session['user'] = users[email]  # Store logged-in user
+        if user and user['password'] == password:
+            session['user'] = {
+                "first_name": user['first_name'],
+                "last_name": user['last_name'],
+                "email": user['email']
+            }
+            flash(f"Welcome back, {user['first_name']}!", "success")
             return redirect(url_for('dashboard'))
         else:
             flash("Invalid email or password!", "danger")
             return redirect(url_for('login'))
-    
+
     return render_template('login.html')
 
-
-# Signup page
-@app.route('/signup', methods=['POST', 'GET'])
+# Signup
+@app.route('/signup', methods=['GET', 'POST'])
 def signup():
     if request.method == 'POST':
         first_name = request.form['firstName']
@@ -52,33 +53,21 @@ def signup():
         i_pass = request.form['password']
         c_pass = request.form['confirmPassword']
 
-        # Check password match
         if i_pass != c_pass:
             flash("Passwords do not match!", "danger")
             return redirect(url_for('signup'))
 
-        users = session.get('users', {})
-
-        if email in users:
+        if get_user_by_email(email):
             flash("Email already registered! Please log in.", "warning")
             return redirect(url_for('login'))
 
-        # Store user in session
-        users[email] = {
-            "first_name": first_name,
-            "last_name": last_name,
-            "email": email,
-            "password": i_pass
-        }
-        session['users'] = users
-
+        add_user(first_name, last_name, email, i_pass)
         flash("Account created successfully! Please log in.", "success")
         return redirect(url_for('login'))
 
     return render_template('signup.html')
 
-
-# Logout route
+# Logout
 @app.route('/logout')
 def logout():
     session.pop('user', None)
@@ -88,4 +77,4 @@ def logout():
 
 
 if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=8080)
+    app.run(debug=True, host="0.0.0.0", port=8080)
