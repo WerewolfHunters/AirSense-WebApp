@@ -9,6 +9,15 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='css/login.css') }}">
 </head>
 <body class="font-sans antialiased text-gray-800">
+    <!-- Loader -->
+     <div id="loader" class="loader-container hidden fixed top-0 left-0 w-full h-full bg-white z-50">
+        <div class="bouncing-dots">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+    </div>
+
     <!-- Login Section -->
     <section class="gradient-bg pt-32 pb-20 px-4 sm:px-6 lg:px-8">
         <div class="max-w-md mx-auto">

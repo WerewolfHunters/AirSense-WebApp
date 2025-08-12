@@ -18,6 +18,25 @@ document.addEventListener('DOMContentLoaded', function() {
         element.style.transform = 'translateY(20px)';
         element.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
     });
+
+    // ===== Loader Integration =====
+     // ===== Loader handling =====
+    const loader = document.getElementById('loader');
+    const loginForm = document.querySelector('form');
+
+    // Always hide loader when page loads (fix back button issue)
+    loader.style.display = 'none';
+
+    if (loginForm) {
+        loginForm.addEventListener('submit', function () {
+            loader.style.display = 'flex'; // Show loader
+
+            // Auto-hide loader after 3 seconds in case of no redirect
+            setTimeout(() => {
+                loader.style.display = 'none';
+            }, 3000);
+        });
+    }
             
     // Mobile menu toggle would go here
     const mobileMenuButton = document.querySelector('[aria-controls="mobile-menu"]');
