@@ -1,18 +1,18 @@
 from bson.objectid import ObjectId
 from database.mongodb.config import db
+from utils.common import hash_password
 
 users_collection = db["users"]
 
 def add_user(first_name, last_name, email, password):
-    """Add new user to the database"""
+    hashed_pw = hash_password(password)
     user = {
         "first_name": first_name,
         "last_name": last_name,
         "email": email,
-        "password": password
+        "password": hashed_pw
     }
-    result = users_collection.insert_one(user)
-    return str(result.inserted_id)
+    users_collection.insert_one(user)
 
 def get_user_by_email(email):
     """Find a user by email"""
