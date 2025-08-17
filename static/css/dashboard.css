@@ -1,0 +1,125 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #F8FAFC;
+    overflow-x: hidden;
+    animation: fadeInBody 0.6s ease-in-out;
+}
+
+@keyframes fadeInBody {
+    from { opacity: 0; transform: scale(0.98); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+/* Sidebar */
+.sidebar {
+    transition: all 0.3s ease;
+    max-height: 100vh;
+    position: relative;
+}
+
+.sidebar-item {
+    transition: all 0.25s ease;
+    position: relative;
+    border-radius: 1rem;
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+}
+
+.sidebar-item:hover {
+    background-color: rgba(79, 139, 255, 0.08);
+    transform: translateX(4px);
+}
+
+.sidebar-item.active {
+    background: linear-gradient(90deg, #4F8BFF 0%, #00C9B7 100%);
+    color: white;
+    box-shadow: 0 3px 12px rgba(79, 139, 255, 0.3);
+    transform: translateX(6px);
+}
+
+/* Ripple click animation */
+.sidebar-item.active::after,
+.sidebar-item:active::after {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 1rem;
+    opacity: 0;
+    animation: sidebarClick 0.5s ease-out;
+}
+
+@keyframes sidebarClick {
+    0% { transform: scale(0.9); opacity: 0.6; }
+    100% { transform: scale(1); opacity: 0; }
+}
+
+/* Cards */
+.card {
+    transition: all 0.35s ease;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+    border-radius: 1rem;
+    background: #fff;
+    animation: fadeInUp 0.5s ease both;
+}
+
+.card:hover {
+    transform: translateY(-6px) scale(1.02);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12);
+}
+
+@keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Progress Rings */
+.progress-ring__circle {
+    transition: stroke-dashoffset 0.5s ease-in-out;
+    transform: rotate(-90deg);
+    transform-origin: 50% 50%;
+}
+
+/* Pulse effect */
+.animate-pulse-slow {
+    animation: pulse 3s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(1.05); }
+}
+
+/* Chat messages */
+.chat-message {
+    animation: fadeInChat 0.35s ease-in-out;
+}
+
+@keyframes fadeInChat {
+    from { opacity: 0; transform: translateY(12px) scale(0.98); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+/* Gauges */
+.gauge-fill {
+    transition: height 1s ease-in-out;
+}
+
+/* Health Score */
+.health-score {
+    background: linear-gradient(135deg, #4F8BFF 0%, #00C9B7 100%);
+    color: #fff;
+    padding: 1rem;
+    border-radius: 1rem;
+    animation: glow 3s infinite alternate;
+}
+
+@keyframes glow {
+    from { box-shadow: 0 0 10px rgba(79, 139, 255, 0.3); }
+    to { box-shadow: 0 0 20px rgba(0, 201, 183, 0.4); }
+}

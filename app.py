@@ -15,7 +15,8 @@ def home():
 @app.route('/dashboard')
 def dashboard():
     if 'user' in session:
-        return f"<h1>Welcome {session['user']['first_name']}!</h1>"
+        # return f"<h1>Welcome {session['user']['first_name']}!</h1>"
+        return render_template('dashboard.html')
     flash("Please log in first!", "warning")
     return redirect(url_for('login'))
 
@@ -38,7 +39,6 @@ def login():
                 "last_name": user['last_name'],
                 "email": user['email']
             }
-            flash(f"Welcome back, {user['first_name']}!", "success")
             return redirect(url_for('dashboard'))
         else:
             flash("Invalid email or password!", "danger")
